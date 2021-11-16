@@ -9,7 +9,6 @@ help:
             printf "%-15s %s\n" $$help_command $$help_info ; \
         done
 
-
 clean:
 	@rm -rf .terraform
 
