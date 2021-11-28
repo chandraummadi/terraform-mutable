@@ -1,11 +1,64 @@
 resource "aws_db_instance" "mysql" {
-  allocated_storage    = 10
-  engine               = "mysql"
-  engine_version       = "5.7"
-  instance_class       = "db.t2.micro"
-  name                 = "mydb"
-  username             = "foo"
-  password             = "foobarbaz"
-  parameter_group_name = "default.mysql5.7"
-  skip_final_snapshot  = true
+  allocated_storage      = 10
+  engine                 = "mysql"
+  engine_version         = "5.7"
+  instance_class         = "db.t2.micro"
+  name                   = "mysql${var.ENV}"
+  username               = local.DB_USER
+  password               = local.DB_PASS
+  parameter_group_name   = aws_db_parameter_group.db-pg.name
+  vpc_security_group_ids = [aws_security_group.mysql-sg.id]
+  db_subnet_group_name   = aws_db_subnet_group.mysql-subnet.name
+  skip_final_snapshot    = true
+
+}
+
+
+resource "aws_db_parameter_group" "db-pg" {
+  name   = "mysql${var.ENV}pg"
+  family = "mysql5.7"
+
+}
+
+resource "aws_security_group" "mysql-sg" {
+  name        = "mysql-sg-${var.ENV}"
+  description = "mysql-sg-${var.ENV}"
+  vpc_id      = data.terraform_remote_state.vpc.outputs.VPC_ID
+
+  ingress {
+    description      = "allow mysql from main VPC"
+    from_port        = 3306
+    to_port          = 3306
+    protocol         = "tcp"
+    cidr_blocks      = local.ALL_CIDR
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    security_groups  = []
+    self             = false
+  }
+
+  egress {
+    description      = " outgoing "
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+    prefix_list_ids  = []
+    security_groups  = []
+    self             = false
+  }
+
+  tags = {
+    Name = "mysql-sg-${var.ENV}"
+  }
+}
+
+resource "aws_db_subnet_group" "mysql-subnet" {
+  name       = "mysql-subnet-${var.ENV}"
+  subnet_ids = data.terraform_remote_state.vpc.outputs.PUBLIC_SUBNETS_IDS
+
+  tags = {
+    Name = "mysql-subnet-${var.ENV}"
+  }
 }
