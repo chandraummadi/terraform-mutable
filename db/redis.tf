@@ -68,14 +68,3 @@ resource "aws_route53_record" "records" {
   allow_overwrite = true
 }
 
-resource "null_resource" "schema-apply" {
-  provisioner "local-exec" {
-    command = <<EOF
-sudo yum install mariadb -y
-curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/archive/main.zip"
-cd /tmp
-unzip -o /tmp/mysql.zip
-mysql -h${aws_route53_record.records.name} -u${local.rds_user} -p${local.rds_pass} <mysql-main/shipping.sql
-EOF
-  }
-}
