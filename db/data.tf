@@ -15,8 +15,8 @@ data "aws_secretsmanager_secret_version" "secret-version" {
   secret_id = data.aws_secretsmanager_secret.by-name.id
 }
 
-data "aws_ami" "ami" {
-  owners       = [973714476881]
-  name_regex   = "^Cent*"
-  most_recent  = true
-}
+##data "aws_ami" "ami" {
+##  owners       = [973714476881]
+##  name_regex   = "^Cent*"
+##  most_recent  = true
+##}
