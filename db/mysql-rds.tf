@@ -69,7 +69,7 @@ resource "aws_route53_record" "mysql" {
   name    = "mysql-${var.ENV}.roboshop.internal"
   type    = "CNAME"
   ttl     = "300"
-  records = aws_db_instance.mysql.address
+  records = [aws_db_instance.mysql.address]
   allow_overwrite = true
 }
 
