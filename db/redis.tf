@@ -17,7 +17,7 @@ resource "aws_elasticache_parameter_group" "redis" {
 
 resource "aws_elasticache_subnet_group" "redis" {
   name       = "redis-${var.ENV}"
-  subnet_ids = data.terraform_remote_state.vpc.outputs.PUBLIC_SUBNETS_IDS
+  subnet_ids = data.terraform_remote_state.vpc.outputs.PRIVATE_SUBNETS_IDS
 
   tags = {
     Name = "redis-${var.ENV}"
@@ -30,7 +30,7 @@ resource "aws_security_group" "redis-sg" {
   description = "redis-${var.ENV}"
   vpc_id      = data.terraform_remote_state.vpc.outputs.VPC_ID
 
-  ingress {
+  ingress = [ {
     description      = "allow redis from main VPC"
     from_port        = 6379
     to_port          = 6379
@@ -40,9 +40,9 @@ resource "aws_security_group" "redis-sg" {
     prefix_list_ids  = []
     security_groups  = []
     self             = false
-  }
+  }]
 
-  egress {
+  egress = [{
     description      = " outgoing "
     from_port        = 0
     to_port          = 0
@@ -52,7 +52,7 @@ resource "aws_security_group" "redis-sg" {
     prefix_list_ids  = []
     security_groups  = []
     self             = false
-  }
+  }]
 
   tags = {
     Name = "redis-${var.ENV}"

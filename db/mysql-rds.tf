@@ -26,7 +26,8 @@ resource "aws_security_group" "mysql-sg" {
   description = "mysql-sg-${var.ENV}"
   vpc_id      = data.terraform_remote_state.vpc.outputs.VPC_ID
 
-  ingress {
+  ingress = [
+    {
     description      = "allow mysql from main VPC"
     from_port        = 3306
     to_port          = 3306
@@ -36,9 +37,9 @@ resource "aws_security_group" "mysql-sg" {
     prefix_list_ids  = []
     security_groups  = []
     self             = false
-  }
+  }]
 
-  egress {
+  egress = [ {
     description      = " outgoing "
     from_port        = 0
     to_port          = 0
@@ -48,7 +49,7 @@ resource "aws_security_group" "mysql-sg" {
     prefix_list_ids  = []
     security_groups  = []
     self             = false
-  }
+  }]
 
   tags = {
     Name = "mysql-sg-${var.ENV}"
@@ -57,7 +58,7 @@ resource "aws_security_group" "mysql-sg" {
 
 resource "aws_db_subnet_group" "mysql-subnet" {
   name       = "mysql-subnet-${var.ENV}"
-  subnet_ids = data.terraform_remote_state.vpc.outputs.PUBLIC_SUBNETS_IDS
+  subnet_ids = data.terraform_remote_state.vpc.outputs.PRIVATE_SUBNETS_IDS
 
   tags = {
     Name = "mysql-subnet-${var.ENV}"
