@@ -1,35 +1,18 @@
-output "VPC_ID" {
-  value = aws_vpc.main.id
+output "PRIVATE_ALB_ARN" {
+  value = aws_lb.privatelb.arn
 }
 
-output "DEFAULT_VPC_ID" {
-  value = var.DEFAULT_VPC_ID
+output "PUBLIC_ALB_ARN" {
+  value = aws_lb.publiclb.arn
 }
 
-output "PRIVATE_SUBNETS_IDS" {
-  value = aws_subnet.private-subnets.*.id
+output "PRIVATE_ALB_DNS" {
+  value = aws_lb.privatelb.dns_name
 }
 
-output "PUBLIC_SUBNETS_IDS" {
-  value = aws_subnet.public-subnets.*.id
+output "PUBLIC_ALB_DNS" {
+  value = aws_lb.publiclb.dns_name
 }
-
-output "PRIVATE_SUBNET_CIDR" {
-  value = aws_subnet.private-subnets.*.cidr_block
-}
-
-output "PUBLIC_SUBNET_CIDR" {
-  value = aws_subnet.public-subnets.*.cidr_block
-}
-
-output "DEFAULT_VPC_CIDR" {
-  value = var.DEFAULT_VPC_CIDR
-}
-
-output "INTERNAL_HOSTEDZONE_ID" {
-  value = var.INTERNAL_HOSTEDZONE_ID
-}
-
-output "ALL_VPC_CIDR" {
-  value = local.ALL_VPC_CIDR
+output "PRIVATE_LISTENER_ARN" {
+  value = aws_lb_listener.privatelb.arn
 }
