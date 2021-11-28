@@ -3,11 +3,11 @@ resource "aws_elasticache_cluster" "redis" {
   engine               = "redis"
   node_type            = "cache.t2.micro"
   num_cache_nodes      = 1
-  parameter_group_name = "default.redis3.2"
+  parameter_group_name = aws_elasticache_parameter_group.redis.name
   engine_version       = "6.x"
   port                 = 6379
-  subnet_group_name = ""
-  security_group_ids = []
+  subnet_group_name = aws_elasticache_subnet_group.redis.name
+  security_group_ids = [aws_security_group.redis-sg.id]
 }
 
 resource "aws_elasticache_parameter_group" "redis" {
@@ -26,8 +26,8 @@ resource "aws_elasticache_subnet_group" "redis" {
 
 
 resource "aws_security_group" "redis-sg" {
-  name        = "mysql-sg-${var.ENV}"
-  description = "mysql-sg-${var.ENV}"
+  name        = "redis-${var.ENV}"
+  description = "redis-${var.ENV}"
   vpc_id      = data.terraform_remote_state.vpc.outputs.VPC_ID
 
   ingress {
