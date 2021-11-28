@@ -74,6 +74,7 @@ resource "aws_route53_record" "mysql" {
 }
 
 resource "null_resource" "schema-apply" {
+  depends_on = [aws_route53_record.mysql]
   provisioner "local-exec" {
     command = <<EOF
 sudo yum install mariadb -y
