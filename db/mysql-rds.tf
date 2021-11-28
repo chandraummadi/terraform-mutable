@@ -64,7 +64,7 @@ resource "aws_db_subnet_group" "mysql-subnet" {
   }
 }
 
-resource "aws_route53_record" "records" {
+resource "aws_route53_record" "mysql" {
   zone_id = data.terraform_remote_state.vpc.outputs.INTERNAL_HOSTEDZONE_ID
   name    = "mysql-${var.ENV}.roboshop.internal"
   type    = "CNAME"
@@ -80,7 +80,7 @@ sudo yum install mariadb -y
 curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/archive/main.zip"
 cd /tmp
 unzip -o /tmp/mysql.zip
-mysql -h${aws_route53_record.records.name} -u${local.rds_user} -p${local.rds_pass} <mysql-main/shipping.sql
+mysql -h${aws_route53_record.mysql.name} -u${local.rds_user} -p${local.rds_pass} <mysql-main/shipping.sql
 EOF
   }
 }

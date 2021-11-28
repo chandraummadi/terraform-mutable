@@ -59,7 +59,7 @@ resource "aws_security_group" "redis-sg" {
   }
 }
 
-resource "aws_route53_record" "records" {
+resource "aws_route53_record" "redis" {
   zone_id = data.terraform_remote_state.vpc.outputs.INTERNAL_HOSTEDZONE_ID
   name    = "redis-${var.ENV}.roboshop.internal"
   type    = "CNAME"
