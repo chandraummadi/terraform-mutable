@@ -11,7 +11,7 @@ resource "aws_spot_instance_request" "mongo" {
   }
 }
 
-resource "aws_ec2_tag" "tags" {
+resource "aws_ec2_tag" "mongo" {
   resource_id = aws_spot_instance_request.mongo.spot_instance_id
   key         = "Name"
   value       = "mongo-${var.ENV}"
@@ -75,7 +75,7 @@ resource "aws_route53_record" "mongo" {
   allow_overwrite = true
 }
 
-resource "null_resource" "ansible" {
+resource "null_resource" "mongo" {
   depends_on = [aws_route53_record.mongo]
   provisioner "remote-exec" {
     connection {

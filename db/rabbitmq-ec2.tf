@@ -11,7 +11,7 @@ resource "aws_spot_instance_request" "rabbitmq" {
   }
 }
 
-resource "aws_ec2_tag" "tags" {
+resource "aws_ec2_tag" "rabbitmq" {
   resource_id = aws_spot_instance_request.rabbitmq.spot_instance_id
   key         = "Name"
   value       = "rabbitmq-${var.ENV}"
@@ -75,7 +75,7 @@ resource "aws_route53_record" "rabbitmq" {
   allow_overwrite = true
 }
 
-resource "null_resource" "ansible" {
+resource "null_resource" "rabbitmq" {
   depends_on = [aws_route53_record.rabbitmq]
   provisioner "remote-exec" {
     connection {
