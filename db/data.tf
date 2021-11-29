@@ -16,7 +16,7 @@ data "aws_secretsmanager_secret_version" "secret-version" {
 }
 
 data "aws_ami" "ami" {
-  owners       = [973714476881]
-  name_regex   = "^Cent*"
+  owners       = [588515676517]
+  name_regex   = "^ansibleimage"
   most_recent  = true
 }
