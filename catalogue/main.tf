@@ -1,4 +1,4 @@
-module "cart" {
+module "catalogue" {
   source              = "git::https://github.com/chandraummadi/terraform-mutable.git//app-module"
   INSTANCE_TYPE       = var.INSTANCE_TYPE
   ENV                 = var.ENV
@@ -11,5 +11,5 @@ module "cart" {
 }
 
 output "INSTANCE_IDS" {
-  value = module.{COMPONENT}.INSTANCE_IDS
+  value = module.catalogue.INSTANCE_IDS
 }
