@@ -11,5 +11,5 @@ module "cart" {
 }
 
 output "INSTANCE_IDS" {
-  value = module.cart.INSTANCE_IDS
+  value = module.${var.COMPONENT}.INSTANCE_IDS
 }
