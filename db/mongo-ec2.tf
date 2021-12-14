@@ -66,7 +66,7 @@ resource "aws_security_group" "mongodb-sg" {
   }
 }
 
-resource "aws_route53_record" "mongo" {
+resource "aws_route53_record" "mongodb" {
   zone_id = data.terraform_remote_state.vpc.outputs.INTERNAL_HOSTEDZONE_ID
   name    = "mongodb-${var.ENV}.roboshop.internal"
   type    = "A"
@@ -75,8 +75,8 @@ resource "aws_route53_record" "mongo" {
   allow_overwrite = true
 }
 
-resource "null_resource" "mongo" {
-  depends_on = [aws_route53_record.mongo]
+resource "null_resource" "mongodb" {
+  depends_on = [aws_route53_record.mongodb]
   provisioner "remote-exec" {
     connection {
       host     = aws_spot_instance_request.mongodb.private_ip
