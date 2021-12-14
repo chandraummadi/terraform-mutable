@@ -1,26 +1,26 @@
-resource "aws_spot_instance_request" "mongo" {
+resource "aws_spot_instance_request" "mongodb" {
   ami                    = data.aws_ami.ami.id
   instance_type          = "t2.micro"
   spot_type = "persistent"
   instance_interruption_behavior = "stop"
-  vpc_security_group_ids = [aws_security_group.mongo-sg.id]
+  vpc_security_group_ids = [aws_security_group.mongodb-sg.id]
   subnet_id = data.terraform_remote_state.vpc.outputs.PRIVATE_SUBNETS_IDS[0]
   wait_for_fulfillment   = true
   tags = {
-    Name = "mongo-${var.ENV}"
+    Name = "mongodb-${var.ENV}"
   }
 }
 
-resource "aws_ec2_tag" "mongo" {
-  resource_id = aws_spot_instance_request.mongo.spot_instance_id
+resource "aws_ec2_tag" "mongodb" {
+  resource_id = aws_spot_instance_request.mongodb.spot_instance_id
   key         = "Name"
-  value       = "mongo-${var.ENV}"
+  value       = "mongodb-${var.ENV}"
 }
 
 
-resource "aws_security_group" "mongo-sg" {
-  name        = "mongo-${var.ENV}"
-  description = "mongo-${var.ENV}"
+resource "aws_security_group" "mongodb-sg" {
+  name        = "mongodb-${var.ENV}"
+  description = "mongodb-${var.ENV}"
   vpc_id      = data.terraform_remote_state.vpc.outputs.VPC_ID
 
   ingress = [
@@ -62,16 +62,16 @@ resource "aws_security_group" "mongo-sg" {
   }]
 
   tags = {
-    Name = "mongo-${var.ENV}"
+    Name = "mongodb-${var.ENV}"
   }
 }
 
 resource "aws_route53_record" "mongo" {
   zone_id = data.terraform_remote_state.vpc.outputs.INTERNAL_HOSTEDZONE_ID
-  name    = "mongo-${var.ENV}.roboshop.internal"
+  name    = "mongodb-${var.ENV}.roboshop.internal"
   type    = "A"
   ttl     = "300"
-  records = [aws_spot_instance_request.mongo.private_ip]
+  records = [aws_spot_instance_request.mongodb.private_ip]
   allow_overwrite = true
 }
 
@@ -79,7 +79,7 @@ resource "null_resource" "mongo" {
   depends_on = [aws_route53_record.mongo]
   provisioner "remote-exec" {
     connection {
-      host     = aws_spot_instance_request.mongo.private_ip
+      host     = aws_spot_instance_request.mongodb.private_ip
       user     = local.ssh_user
       password = local.ssh_pass
     }
