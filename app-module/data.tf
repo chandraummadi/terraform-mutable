@@ -18,7 +18,7 @@ data "terraform_remote_state" "alb" {
 
 data "aws_ami" "ami" {
   owners       = [588515676517]
-  name_regex   = "^ansibleimage"
+  name_regex   = "^workstation-ami"
   most_recent  = true
 }
 
