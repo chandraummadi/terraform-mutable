@@ -13,7 +13,7 @@ resource "null_resource" "app-deploy" {
       "sudo yum install python3-pip -y",
       "sudo pip3 install pip --upgrade",
       "sudo pip3 install ansible",
-      "ansible-pull -U https://github.com/chandraummadi/Devops-projects.git Ansible/roboshop/roboshop-pull.yml -e COMPONENT=${var.COMPONENT} -e ENV=dev"
+      "ansible-pull -U https://github.com/chandraummadi/Devops-projects.git Ansible/roboshop/roboshop-pull.yml -e COMPONENT=${var.COMPONENT} -e ENV=${var.ENV}  -e APP_VERSION=${var.APP_VERSION} -e NEXUS_USER=${var.NEXUS_USER} -e NEXUS_PASS=${var.NEXUS_PASS}"
     ]
   }
 }
