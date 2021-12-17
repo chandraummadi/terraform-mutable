@@ -28,3 +28,25 @@ resource "aws_ec2_tag" "ec2-name-tag" {
   key         = "Name"
   value       = local.tags["Name"]
 }
+
+
+resource "aws_ec2_tag" "ec2-monitor-tag" {
+  count       = length(local.INSTANCE_IDS)
+  resource_id = element(local.INSTANCE_IDS, count.index)
+  key         = "Monitor"
+  value       = "yes"
+}
+
+resource "aws_ec2_tag" "ec2-env-tag" {
+  count       = length(local.INSTANCE_IDS)
+  resource_id = element(local.INSTANCE_IDS, count.index)
+  key         = "environment"
+  value       = var.ENV
+}
+
+resource "aws_ec2_tag" "ec2-component-tag" {
+  count       = length(local.INSTANCE_IDS)
+  resource_id = element(local.INSTANCE_IDS, count.index)
+  key         = "COMPONENT"
+  value       = var.COMPONENT
+}
